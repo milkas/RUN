@@ -1,0 +1,123 @@
+                             // deklarace promennych
+var a = 1
+var b
+var string = "ahoj_ja_sem_pepa"
+var double = 5,5
+var double2 = -2,0
+var bool = true
+var temp
+
+//prace s integerama
+b = 2
+c = a + b
+c = c * 2
+c = c / 2
+c = c  - -1
+print(c)
+
+//prace s double
+double = double + double2
+double = double * double2
+double2 = double / double2
+double = double - double2
+print (double)
+
+//prace se stringem
+print (string)
+temp = string.split("_")
+var druhystring = temp[1]
+print (druhystring)
+
+//if
+if(!bool) {
+    print ("tohle_se_nestane")
+}
+else {
+    if ((c == 4) && bool){
+        print ("if_funguje")
+    }
+    else {}
+
+}
+
+//pole
+
+var array2
+
+var array = [11, 22, 33]    //vytvori pole o danych prvcich
+array2 = [4]                 //vytvori pole o delce 4 a naplni ho defaultne 0 
+
+var i = 0
+print ("")
+while (i<3){                // vypis prvku z pole array
+    temp = array[i]
+    print (temp)
+    i=i+1
+}
+
+array[1] = 44
+
+print ("")
+i=0
+while (i<3){                // vypis prvku z pole array
+    temp = array[i]
+    print (temp)
+    i=i+1
+}
+
+//funkce
+var x = 3
+function f1() {3+333}
+function f2(x) {
+
+    var c 
+    c = 55
+    print(c)
+    c
+
+    function f3() {
+    33
+
+    }
+
+}
+print (x)
+print (c)
+c = f1()
+print (c)
+
+c = f2(x)
+print (c)
+
+//funkce jako objekt
+function Obdelnik(sirka, vyska) {
+
+    this.sirka = sirka
+    this.vyska = vyska
+    this.obsah1 = function() {
+        this.sirka * this.vyska
+    }
+    this.obsah2 = function() {
+        sirka * vyska
+    }
+
+}
+
+var obdelnik = new Obdelnik(10, 20)
+var obsah1 = obdelnik.obsah1()
+var obsah2 = obdelnik.obsah2()
+print (obsah1) 
+print (obsah2) 
+
+var string = read("input.txt")
+print(string)
+
+string = "vystup"
+write(string) //zapise vystup do vystupniho souboru
+
+
+
+
+
+
+

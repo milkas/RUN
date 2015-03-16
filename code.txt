@@ -1,0 +1,298 @@
+var HC1 = 0,98
+var HC2 = 1000,0
+
+var INIT_TEMP =  10000,0
+var FINAL_TEMP = 0,1
+var NUM_STEPS =  10
+var COOL_FACTOR = 0,90
+
+var i
+var j
+var v
+
+//naparsovani vstupniho dokumentu
+var x = read("sat.3sat")
+var a = x.split(",")
+
+var tmp = a[0]
+var tmpint = toint(tmp)
+var nvar = tmpint
+var tmp = a[1]
+var tmpint = toint(tmp)
+var ncl = tmpint
+var tmp = a[2]
+var tmpint = toint(tmp)
+var ntrm = tmpint
+
+var clauses = [ncl]
+var negates = [ncl]
+var weights = [ncl]
+
+var index = 3 //klauzule zacinaji az na cisle 3
+var i = 0
+var element 
+var clause = [nvar]
+var negate = [nvar]
+
+print("pocet_promennych")
+write("pocet_promennych")
+print(nvar)
+write(nvar)
+print("pocet_klauzuli")
+write("pocet_klauzuli")
+print(ncl)
+write(ncl)
+print("pocet_termu")
+write("pocet_klauzuli")
+print(ntrm)
+write(ntrm)
+
+while (i < ncl){
+
+    var j = 0
+    while(j < nvar){
+        element = a[index]
+        element = toint(element)
+
+        if (element < 0){
+            element = element * -1
+            element = element - 1
+            clause[j] = element
+            negate[j] = 1
+        }
+        else{
+            element = element - 1
+            clause[j] = element
+            negate[j] = 0
+        }
+        index = index + 1
+        j=j+1
+    }
+negates[i] = negate
+clauses[i] = clause
+i = i+1
+}
+
+var maxweight = 0
+i=0
+while (i < 3){
+    element = a[index]
+    element = toint(element)
+    weights[i] = element
+    i = i+1
+    index = index + 1
+}
+i=0
+while (i < 3){
+    element = weights[i]
+    maxweight = weights[i] + maxweight 
+    i = i+1
+}
+
+i = 0
+var xxx
+print ("vahy_promennych")
+write ("vahy_promennych")
+while (i<nvar){
+    xxx = weights[i]
+print(xxx)
+write(xxx)
+i = i+1
+}
+
+var actualclause
+i = 0
+while (i < ncl){
+    var j = 0
+    actualclause = clauses[i]
+    print ("klauzule")
+    write ("klauzule")
+    while(j < nvar){
+        element = actualclause[j]
+        print (element)
+        write (element)
+        j=j+1
+    }
+i = i+1
+}
+
+print("")
+print("Zacatek_vypoctu")
+write("")
+write("Zacatek_vypoctu")
+
+var bestvaluations = [ncl]
+var bestfullfiled = 0
+var bestweight = 0
+var bestquality = 0,0
+
+var statevaluations = [ncl]
+var statefullfiled = 0
+var stateweight = 0
+var statequality = 0,0
+
+var temp = INIT_TEMP
+var steps
+
+
+i=0
+while (i<nvar){
+statevaluations[i] = 0
+i=i+1
+}
+
+while (temp > FINAL_TEMP) {
+    steps = NUM_STEPS
+    while(steps > 0){
+     
+        //new state
+        var choose
+        var newval = 0
+        var fullfiled = 0,0
+        var weight = 0
+        var quality = 0,0
+        var delta = 0,0
+        var x
+        x = randint()
+
+        choose = x%nvar 
+        var choosenvar = statevaluations[choose]
+        if (choosenvar == 0) {
+            newval = 1
+        }
+        else {
+            newval = 0
+        }   
+        statevaluations[choose] = newval
+
+        var qqq = 0
+        //print ("state")
+        while (qqq<3){
+        var qq = statevaluations[qqq]
+        //print(qq)
+        qqq=qqq+1
+        }
+
+
+        var ii = 0
+        var jj = 0
+        var val
+        var temporary
+        
+        fullfiled = 0,0
+        while (ii<ncl){
+            val = false
+            jj=0
+            while (jj<ntrm){
+                temporary = clauses[ii]
+                temporary = temporary[jj]
+                temporary = statevaluations[temporary]
+                temporary = tobool(temporary)
+
+                var temporary2 
+                temporary2 = negates[ii]
+                temporary2 = temporary2[jj]
+                temporary2 = tobool(temporary2)
+        
+                temporary = ((temporary || temporary2) && (temporary == !temporary2)) 
+                //print ("term")
+                //print(temporary)
+                val = val || temporary
+                //print ("value")
+                //print (val)
+
+                jj = jj+1
+            }
+            if (val){
+                fullfiled = fullfiled + 1,0
+            }
+            else {
+        }
+        ii = ii+1
+        }
+
+        weight = 0
+
+        i = 0
+        while (i<nvar){
+            temporary = statevaluations[i]
+            temporary2 = weights[i]
+            temporary = temporary * temporary2
+            weight = weight + temporary
+            i = i+1
+        }
+
+        var maxweightd = todouble(maxweight)
+        var ncld = todouble(ncl)
+        var weightd = todouble(weight)
+        var aa = fullfiled / ncld
+        var bb = weightd /maxweightd
+        var cc = 1,0 - HC1
+        bb = cc * bb
+        aa = HC1 * aa
+        cc = aa + bb
+        var quality2 = HC2 * cc
+        //print("")
+        //print(fullfiled)
+        //print(quality2)
+
+        delta = quality2-statequality
+        quality = quality2
+  
+        x = rand() 
+        var expo
+        expo = delta/temp
+        expo = exp(expo)
+        if ((delta > 0,0)|| (x < expo)){
+            statefullfiled = fullfiled
+            stateweight = weight
+            statequality = quality        
+        }
+        else {
+            if (newval == 0){
+                statevaluations[choose] = 1
+            }
+            else {
+                statevaluations[choose] = 0
+            }
+        }
+
+        steps = steps - 1
+
+	if (statequality > bestquality){
+            bestfullfiled = statefullfiled
+            bestweight = stateweight
+            bestquality = statequality
+            bestvaluations = statevaluations
+            print("bestweight")
+            print(bestweight)
+            write("bestweight")
+            write(bestweight)
+        }
+        else {
+        }
+    }
+    temp = temp * COOL_FACTOR
+}
+
+
+print("ohodnoceni")
+write("ohodnoceni")
+i = 0
+while(i<3){
+    j = bestvaluations[i]
+print(j)
+i = i+1
+}
+
+print("best")
+write("best")
+print(bestweight)
+write(bestweight)
+
+
+
+
+
+
+
